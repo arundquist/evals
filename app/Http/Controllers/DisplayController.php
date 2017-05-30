@@ -21,7 +21,7 @@ class DisplayController extends Controller
     public function pickInstructor()
     {
       $this->authorize('approved');
-      $instructors=Instructor::all();
+      $instructors=Instructor::orderBy('name')->get();
       return view('displays.pickinstructor',
         ['instructors'=>$instructors]);
     }
