@@ -30,11 +30,13 @@
             @endif
           </td>
 
-          @foreach($allbins[$course->id] AS $key=> $qs)
-            <td>{!! Sparkflex::sparkflex(Stats::augmentBins($qs)) !!}<br/>
 
-              <a href="#" rel="popover" data-popover-content="#myPopover{{$course->id}}{{$key}}">{{Stats::avgBin($qs)}}
-                ({{isset($comments[$course->id][$key])?count($comments[$course->id][$key]):0}})</a>
+
+          @foreach ($questions AS $qid=>$q)
+            <td>{!! Sparkflex::sparkflex(Stats::augmentBins($allbins[$course->id][$q->id])) !!}<br/>
+
+              <a href="#" rel="popover" data-popover-content="#myPopover{{$course->id}}{{$q->id}}">{{Stats::avgBin($allbins[$course->id][$q->id])}}
+                ({{isset($comments[$course->id][$q->id])?count(array_collapse($comments[$course->id][$q->id])):0}})</a>
             </td>
 
 
@@ -44,6 +46,7 @@
             <a href="#" rel="popover" data-popover-content="#gencomments{{$course->id}}">{{$avgs[$course->id]}} ({{count($gencomments[$course->id])}})</a>
           </td>
         </tr>
+
       @endforeach
     </tbody>
   </table>
@@ -54,8 +57,10 @@
   @foreach ($qcomments AS $question_id=>$qc)
     <div id="myPopover{{$course_id}}{{$question_id}}" class="hide">
       @foreach ($qc AS $score=>$single)
+        @foreach ($single AS $truesingle)
 
-        <p>{{$score}}: {{$single}}</p>
+          <p>{{$score}}: {{$truesingle}}</p>
+        @endforeach
 
       @endforeach
     </div>

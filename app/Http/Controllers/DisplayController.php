@@ -62,7 +62,7 @@ class DisplayController extends Controller
                           left join scores s on s.id=c.score_id where s.course_id=$course->id");
         foreach ($comms AS $comm)
         {
-          $comments[$course->id][$comm->question_id][$comm->score]=$comm->comment;
+          $comments[$course->id][$comm->question_id][$comm->score][]=$comm->comment;
         }
 
         foreach ($all AS $single)
