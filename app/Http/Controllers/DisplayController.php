@@ -165,6 +165,21 @@ class DisplayController extends Controller
         'questions'=>$questions]);
     }
 
+    public function getAllWithSameCourse($dept, $num)
+    {
+      $alldepts=["$dept $num"];
+      $all=[];
+      $questions=Question::orderBy('questionnum')->get();
+      $courseids=Course::where('dept',$dept)->where('number',$num)->pluck('id')->toArray();
+      $all["$dept $num"]=$this->getCourseData($courseids);
+      
+
+      return view('displays.alldepts',
+        ['all'=>$all,
+        'depts'=>$alldepts,
+        'questions'=>$questions]);
+    }
+
     public function getLevel($level)
     {
       $alldepts=[$level];

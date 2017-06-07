@@ -23,12 +23,21 @@
           <td>{{$dept}}</td>
 
 
-          @foreach ($questions AS $question)
-            <td>{!! Sparkflex::Sparkflex(Stats::augmentBins($all[$dept]['bins'][$question->id])) !!}<br/>
+
+
+          @foreach ($questions AS $qid=>$question)
+            @if (!isset($all[$dept]['bins'][$question->id]))
+              <td>nothing here</td>
+            @else
+            <td>{!! Sparkflex::sparkflex(Stats::augmentBins($all[$dept]['bins'][$question->id])) !!}<br/>
 
               {{Stats::avgBin($all[$dept]['bins'][$question->id])}}
             </td>
+            @endif
+
           @endforeach
+
+
           <td>
             {{$all[$dept]['avg']}}
           </td>

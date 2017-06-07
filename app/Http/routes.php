@@ -21,6 +21,7 @@ Route::get('dept/{dept}', 'DisplayController@getDept');
 Route::get('level/{num}', 'DisplayController@getLevel');
 Route::get('alllevels', 'DisplayController@getAllLevels');
 Route::get('alldepts', 'DisplayController@getAllDepts');
+Route::get('samecourses/{dept}/{num}', 'DisplayController@getAllWithSameCourse')->middleware('auth');
 
 Route::auth();
 
