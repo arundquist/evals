@@ -33,12 +33,15 @@
 
 
           @foreach ($questions AS $qid=>$q)
+            @if (!isset($allbins[$course->id][$q->id]))
+              <td>nothing here</td>
+            @else
             <td>{!! Sparkflex::sparkflex(Stats::augmentBins($allbins[$course->id][$q->id])) !!}<br/>
 
               <a href="#" rel="popover" data-popover-content="#myPopover{{$course->id}}{{$q->id}}">{{Stats::avgBin($allbins[$course->id][$q->id])}}
                 ({{isset($comments[$course->id][$q->id])?count(array_collapse($comments[$course->id][$q->id])):0}})</a>
             </td>
-
+            @endif
 
           @endforeach
 
@@ -48,6 +51,7 @@
         </tr>
 
       @endforeach
+
     </tbody>
   </table>
 

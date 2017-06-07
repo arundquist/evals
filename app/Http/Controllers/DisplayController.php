@@ -33,7 +33,7 @@ class DisplayController extends Controller
       $this->authorize('approved');
       $instructor=Instructor::findOrFail($instructor_id);
       $courses=$instructor->courses()->with('scores')->with('gencomments')->get();
-      $courseids=$courses->pluck('id')->toArray();
+      //$courseids=$courses->pluck('id')->toArray();
       $allbins=[];
       $avgs=[];
       $gencomments=[];
@@ -76,6 +76,7 @@ class DisplayController extends Controller
       {
         $courses=$courses->except($id);
       }
+
       return view('displays.instructor2',
         ['allbins'=>$allbins,
         'evalcounts'=>$evalcounts,
