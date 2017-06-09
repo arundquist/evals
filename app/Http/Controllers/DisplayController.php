@@ -41,7 +41,7 @@ class DisplayController extends Controller
       $evalcounts=[];
       $classinfo=[];
       $deletes=[];
-      $questions=Question::orderBy('questionnum')->get();
+      $questions=Question::orderBy('questionnum')->get()->keyBy('id');
       foreach ($courses AS $course)
       {
         $all=$course->scores()
@@ -172,7 +172,7 @@ class DisplayController extends Controller
       $questions=Question::orderBy('questionnum')->get();
       $courseids=Course::where('dept',$dept)->where('number',$num)->pluck('id')->toArray();
       $all["$dept $num"]=$this->getCourseData($courseids);
-      
+
 
       return view('displays.alldepts',
         ['all'=>$all,
@@ -259,16 +259,16 @@ class DisplayController extends Controller
 
       $result=\DB::connection('mysql2')
         ->table('courses')
-        ->select('id','enrollment')
+        ->select('id','enrollment','title','credits')
         ->where('crn',$course->crn)
         ->where('term_id',$term_id->id)
         ->first();
 
       if ($result)
       {
-        $classinfo=["id"=>$result->id, "enrollment"=>$result->enrollment];
+        $classinfo=["id"=>$result->id, "enrollment"=>$result->enrollment,"title"=>$result->title,"credits"=>$result->credits];
       } else {
-        $classinfo=["id"=>False, "enrollment"=>0];
+        $classinfo=["id"=>False, "enrollment"=>0,"title"=>'',"credits"=>''];
       }
       return $classinfo;
     }

@@ -23,7 +23,12 @@
         <tr>
           <td>{{$course->semester->ay}} {{$course->semester->season}}</td>
           <td><a href='{{action('DisplayController@getDept',[$course->dept])}}'>{{$course->dept}}</a>
-              <a href='{{action('DisplayController@getAllWithSameCourse', [$course->dept,$course->number])}}'>{{$course->number}}</a></td>
+              <a href='{{action('DisplayController@getAllWithSameCourse', [$course->dept,$course->number])}}'>{{$course->number}}</a>
+              {{$classinfo[$course->id]['title']}}
+              @if($classinfo[$course->id]['credits'] != '')
+                ({{$classinfo[$course->id]['credits']}} cr)
+              @endif
+            </td>
           <td>{{$evalcounts[$course->id]}}/{{$classinfo[$course->id]['enrollment']}}
             @if ($classinfo[$course->id]['enrollment'])
               {{number_format($evalcounts[$course->id]/$classinfo[$course->id]['enrollment']*100)}}%
@@ -60,6 +65,7 @@
 @foreach ($comments as $course_id=>$qcomments)
   @foreach ($qcomments AS $question_id=>$qc)
     <div id="myPopover{{$course_id}}{{$question_id}}" class="hide">
+        <p>{{$questions->get($question_id)->question}}</p>
       @foreach ($qc AS $score=>$single)
         @foreach ($single AS $truesingle)
 
