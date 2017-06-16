@@ -26,6 +26,13 @@ class DisplayController extends Controller
         ['instructors'=>$instructors]);
     }
 
+    function random_color_part() {
+      return str_pad( dechex( mt_rand( 200, 255 ) ), 2, '0', STR_PAD_LEFT);
+    }
+
+    function random_color() {
+        return $this->random_color_part() . $this->random_color_part() . $this->random_color_part();
+    }
 
 
     public function showInstructor($instructor_id)
@@ -41,6 +48,10 @@ class DisplayController extends Controller
       $evalcounts=[];
       $classinfo=[];
       $deletes=[];
+      $colors=[];
+      foreach ($courses AS $course) {
+        $colors[$course->semester->ay]=$this->random_color();
+      }
       $questions=Question::orderBy('questionnum')->get()->keyBy('id');
       foreach ($courses AS $course)
       {
@@ -71,6 +82,7 @@ class DisplayController extends Controller
         }
 
         $evalcounts[$course->id]=array_sum($allbins[$course->id][$single->question_id]);
+        //dd([$allbins[$course->id][$single->question_id],$single->question_id]);
       };
       foreach($deletes AS $id)
       {
@@ -86,7 +98,8 @@ class DisplayController extends Controller
         'classinfo'=>$classinfo,
         'instructor'=>$instructor,
         'questions'=>$questions,
-        'avgs'=>$avgs]);
+        'avgs'=>$avgs,
+        'colors'=>$colors]);
 
     }
 

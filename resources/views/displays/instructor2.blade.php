@@ -20,7 +20,7 @@
     <tbody>
 
       @foreach($courses AS $course)
-        <tr>
+        <tr bgcolor="{{$colors[$course->semester->ay]}}">
           <td>{{$course->semester->ay}} {{$course->semester->season}}</td>
           <td><a href='{{action('DisplayController@getDept',[$course->dept])}}'>{{$course->dept}}</a>
               <a href='{{action('DisplayController@getAllWithSameCourse', [$course->dept,$course->number])}}'>{{$course->number}}</a>
