@@ -18,6 +18,9 @@
                       <li class="list-group-item">
                         <a href='{{action('DisplayController@getAllDepts')}}'>All departments</a>
                       </li>
+                      <li class="list-group-item">
+                        <a href='{{action('DisplayController@getAll')}}'>All average</a>
+                      </li>
                     </ul>
                 </div>
             </div>

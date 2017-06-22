@@ -212,6 +212,35 @@ class DisplayController extends Controller
         'questions'=>$questions]);
     }
 
+    public function getAll()
+    {
+      $alldepts=["all"];
+      $all=[];
+      $questions=Question::orderBy('questionnum')->get();
+      $all=\DB::table('scores')
+                ->select('course_id','question_id', 'score', \DB::raw("count('score') AS c"))
+                ->where('score',"!=","")
+                ->groupBy('question_id','score')
+                ->orderBy('question_id')
+                ->orderBy('score')
+                ->get();
+      $allbins=[];
+      foreach ($all AS $a)
+      {
+        $allbins[$a->question_id][$a->score]=$a->c;
+      }
+      //$avg=Score::all()->avg('score');
+      $avg=\DB::table('scores')
+          ->select(\DB::raw("avg(score) AS a"))
+          ->first()->a;
+      $all["all"]=['bins'=>$allbins,'avg'=>$avg];
+
+      return view('displays.alldepts',
+        ['all'=>$all,
+        'depts'=>$alldepts,
+        'questions'=>$questions]);
+    }
+
     public function getAllLevels()
     {
       $alldepts=[1000,3000,5000];
