@@ -76,4 +76,6 @@ class Stats
     }
     return number_format($i/$size*100,0);
   }
+
+
 }

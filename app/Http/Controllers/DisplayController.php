@@ -69,7 +69,7 @@ class DisplayController extends Controller
       //dd($means[15]);
       $means["all"]=Score::select(\DB::raw("avg(score) as a"))
                     ->groupBy("course_id")
-                    ->havingRaw("count(score)>=10")
+                    ->havingRaw("count(score)>=100")
                     ->orderBy(\DB::raw("avg(score)"))
                     ->pluck("a")
                     ->toArray();
@@ -335,5 +335,13 @@ class DisplayController extends Controller
         $classinfo=["id"=>False, "enrollment"=>0,"title"=>'',"credits"=>''];
       }
       return $classinfo;
+    }
+
+    public function getHashedId($id)
+    {
+      $id=Instructor::where(\DB::raw("md5(id)"),$id)->first();
+      //return redirect("hashinstructor/$id->id");
+      return $this->showInstructor($id->id);
+      //return "hi there";
     }
 }

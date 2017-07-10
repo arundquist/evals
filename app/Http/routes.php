@@ -23,6 +23,8 @@ Route::get('alllevels', 'DisplayController@getAllLevels');
 Route::get('alldepts', 'DisplayController@getAllDepts');
 Route::get('all', 'DisplayController@getAll');
 Route::get('samecourses/{dept}/{num}', 'DisplayController@getAllWithSameCourse')->middleware('auth');
+Route::get('single/{id}','DisplayController@getHashedId');
+Route::get('hashinstructor/{id}','DisplayController@showInstructor');
 
 Route::auth();
 
