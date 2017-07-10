@@ -42,8 +42,11 @@
               <td>nothing here</td>
             @else
             <td>{!! Sparkflex::sparkflex(Stats::augmentBins($allbins[$course->id][$q->id])) !!}<br/>
-
-              <a href="#" rel="popover" data-popover-content="#myPopover{{$course->id}}{{$q->id}}">{{Stats::avgBin($allbins[$course->id][$q->id])}}
+              @php
+                $a=Stats::avgBin($allbins[$course->id][$q->id]);
+              @endphp
+              <a href="#" rel="popover" data-popover-content="#myPopover{{$course->id}}{{$q->id}}">{{$a}}
+                [{{Stats::percentile($a,$means[$q->id])}}]
                 ({{isset($comments[$course->id][$q->id])?count(array_collapse($comments[$course->id][$q->id])):0}})</a>
             </td>
             @endif
@@ -51,7 +54,9 @@
           @endforeach
 
           <td>
-            <a href="#" rel="popover" data-popover-content="#gencomments{{$course->id}}">{{$avgs[$course->id]}} ({{count($gencomments[$course->id])}})</a>
+            <a href="#" rel="popover" data-popover-content="#gencomments{{$course->id}}">{{$avgs[$course->id]}}
+              [{{Stats::percentile($avgs[$course->id],$means["all"])}}]
+               ({{count($gencomments[$course->id])}})</a>
           </td>
         </tr>
 

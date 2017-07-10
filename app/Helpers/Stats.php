@@ -66,4 +66,14 @@ class Stats
     };
     return $numcomments;
   }
+
+  public static function percentile($mean, $list)
+  {
+    $i=0;
+    $size=count($list);
+    while ($list[$i] < $mean) {
+      $i++;
+    }
+    return number_format($i/$size*100,0);
+  }
 }

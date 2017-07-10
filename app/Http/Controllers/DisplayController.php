@@ -53,6 +53,27 @@ class DisplayController extends Controller
         $colors[$course->semester->ay]=$this->random_color();
       }
       $questions=Question::orderBy('questionnum')->get()->keyBy('id');
+
+      // grab means
+      $means=[];
+      foreach ($questions AS $q) {
+        //$means[$q->id]=\DB::Select("select avg(score) a from scores where question_id=$q->id group by course_id having count(score)>=10 order by avg(score)");
+        $means[$q->id]=Score::select(\DB::raw("avg(score) as a"))
+                      ->where("question_id",$q->id)
+                      ->groupBy("course_id")
+                      ->havingRaw("count(score)>=10")
+                      ->orderBy(\DB::raw("avg(score)"))
+                      ->pluck("a")
+                      ->toArray();
+      }
+      //dd($means[15]);
+      $means["all"]=Score::select(\DB::raw("avg(score) as a"))
+                    ->groupBy("course_id")
+                    ->havingRaw("count(score)>=10")
+                    ->orderBy(\DB::raw("avg(score)"))
+                    ->pluck("a")
+                    ->toArray();
+
       foreach ($courses AS $course)
       {
         $all=$course->scores()
@@ -99,7 +120,8 @@ class DisplayController extends Controller
         'instructor'=>$instructor,
         'questions'=>$questions,
         'avgs'=>$avgs,
-        'colors'=>$colors]);
+        'colors'=>$colors,
+        'means'=>$means]);
 
     }
 
