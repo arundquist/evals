@@ -38,6 +38,14 @@ class DisplayController extends Controller
     public function showInstructor($instructor_id)
     {
       $this->authorize('approved');
+      $alldata=$this->getInstructorData($instructor_id);
+
+      return view('displays.instructor2',$alldata);
+
+    }
+
+    public function getInstructorData($instructor_id)
+    {
       $instructor=Instructor::findOrFail($instructor_id);
       $courses=$instructor->courses()->with('scores')->with('gencomments')->get();
       //$courseids=$courses->pluck('id')->toArray();
@@ -110,8 +118,7 @@ class DisplayController extends Controller
         $courses=$courses->except($id);
       }
 
-      return view('displays.instructor2',
-        ['allbins'=>$allbins,
+      return ['allbins'=>$allbins,
         'evalcounts'=>$evalcounts,
         'comments'=>$comments,
         'gencomments'=>$gencomments,
@@ -121,8 +128,7 @@ class DisplayController extends Controller
         'questions'=>$questions,
         'avgs'=>$avgs,
         'colors'=>$colors,
-        'means'=>$means]);
-
+        'means'=>$means];
     }
 
     public function getDeptData($dept)
@@ -340,8 +346,10 @@ class DisplayController extends Controller
     public function getHashedId($id)
     {
       $id=Instructor::where(\DB::raw("md5(id)"),$id)->first();
-      //return redirect("hashinstructor/$id->id");
-      return $this->showInstructor($id->id);
-      //return "hi there";
+      // //return redirect("hashinstructor/$id->id");
+      $alldata=$this->getInstructorData($id->id);
+      //
+      return view('displays.instructor2',$alldata);
+
     }
 }
