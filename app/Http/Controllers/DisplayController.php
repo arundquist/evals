@@ -133,6 +133,7 @@ class DisplayController extends Controller
 
     public function getInstructorSummary($instructor_id)
     {
+      $this->authorize('approved');
       $instructor=Instructor::findOrFail($instructor_id);
       $courses=$instructor->courses()->with('scores')->get();
       $avgs=[];
