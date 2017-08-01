@@ -131,6 +131,53 @@ class DisplayController extends Controller
         'means'=>$means];
     }
 
+    public function getInstructorSummary($instructor_id)
+    {
+      $instructor=Instructor::findOrFail($instructor_id);
+      $courses=$instructor->courses()->with('scores')->get();
+      $avgs=[];
+      $classinfo=[];
+      $evalcounts=[];
+      $means=[];
+      $ayavgs=[];
+      $colors=[];
+      foreach ($courses AS $course) {
+        $colors[$course->semester->ay]=$this->random_color();
+      }
+
+      $means["all"]=Score::select(\DB::raw("avg(score) as a"))
+                    ->groupBy("course_id")
+                    ->havingRaw("count(score)>=100")
+                    ->orderBy(\DB::raw("avg(score)"))
+                    ->pluck("a")
+                    ->toArray();
+
+      foreach ($courses AS $course)
+      {
+        $ay=$course->semester->ay;
+        $avgs[$course->id]=$course->scores()->avg('score');
+        $classinfo[$course->id]=$this->getClassInfo($course->id);
+        $count=$course->scores()->count('score');
+        $count=$count/10;
+
+        $evalcounts[$course->id]=$count;
+        if ($classinfo[$course->id]['enrollment']!=0)
+        {
+          $ayavgs[$ay][]=$avgs[$course->id];
+        };
+      };
+      //dd($ayavgs);
+      return view('displays.summary',['avgs'=>$avgs,
+              'means'=>$means,
+              'classinfo'=>$classinfo,
+              'evalcounts'=>$evalcounts,
+              'ayavgs'=>$ayavgs,
+              'instructor'=>$instructor,
+              'colors'=>$colors,
+              'courses'=>$courses]);
+
+    }
+
     public function getDeptData($dept)
     {
       $courseids=Course::where('dept',$dept)->pluck('id')->toArray();

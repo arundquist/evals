@@ -3,7 +3,7 @@
 @section('content')
 
 <div class='container'>
-  <h1>{{$instructor->name}}</h1>
+  <h1><a href='{{action('DisplayController@getInstructorSummary',[$instructor->id])}}'>{{$instructor->name}}</a> </h1>
 
   <table class='table'>
     <thead>

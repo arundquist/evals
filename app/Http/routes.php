@@ -24,6 +24,7 @@ Route::get('alldepts', 'DisplayController@getAllDepts');
 Route::get('all', 'DisplayController@getAll');
 Route::get('samecourses/{dept}/{num}', 'DisplayController@getAllWithSameCourse')->middleware('auth');
 Route::get('single/{id}','DisplayController@getHashedId');
+Route::get('summary/{id}','DisplayController@getInstructorSummary')->middleware('auth');
 
 Route::auth();
 
