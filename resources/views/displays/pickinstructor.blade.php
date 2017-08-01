@@ -6,7 +6,8 @@
     @foreach($instructors AS $instructor)
       <li class='list-group-item'>
         <a href='{{action('DisplayController@showInstructor',[$instructor->id])}}'>{{$instructor->name}}</a>
-        link: <a href='{{action('DisplayController@getHashedId', [md5($instructor->id)])}}'>{{action('DisplayController@getHashedId', [md5($instructor->id)])}}</a>
+        <a href='{{action('DisplayController@getHashedId', [md5($instructor->id)])}}'>hash link</a>
+        <a href='{{action('DisplayController@getInstructorSummary',[$instructor->id])}}'>summary</a>
       </li>
     @endforeach
   </ul>
