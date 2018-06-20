@@ -74,18 +74,19 @@ class DisplayController extends Controller
                       ->pluck("a")
                       ->toArray();
       }
-      //dd($means[15]);
+      //dd($means[10]);
       $means["all"]=Score::select(\DB::raw("avg(score) as a"))
                     ->groupBy("course_id")
                     ->havingRaw("count(score)>=100")
                     ->orderBy(\DB::raw("avg(score)"))
                     ->pluck("a")
                     ->toArray();
-
+      //dd($means);
       foreach ($courses AS $course)
       {
         $all=$course->scores()
                   ->select('question_id','score', \DB::raw("count('score') AS c"))
+                  ->where('instructor_id',$instructor_id)
                   ->groupBy('question_id','score')
                   ->orderBy('score')
                   ->get();
@@ -94,12 +95,12 @@ class DisplayController extends Controller
             $deletes[]=$course->id;
             continue;
           }
-        $avgs[$course->id]=$course->scores()->avg('score');
-        $gencomments[$course->id]=$course->gencomments;
+        $avgs[$course->id]=$course->scores()->where('instructor_id',$instructor_id)->avg('score');
+        $gencomments[$course->id]=$course->gencomments()->where('instructor_id',$instructor_id)->get();
         $classinfo[$course->id]=$this->getClassInfo($course->id);
         //$score_ids=$course->scores()->pluck('id')->toArray();
         $comms=\DB::Select("select question_id, score, comment from comments c
-                          left join scores s on s.id=c.score_id where s.course_id=$course->id");
+                          left join scores s on s.id=c.score_id where s.course_id=$course->id and s.instructor_id=$instructor_id");
         foreach ($comms AS $comm)
         {
           $comments[$course->id][$comm->question_id][$comm->score][]=$comm->comment;
@@ -152,13 +153,15 @@ class DisplayController extends Controller
                     ->orderBy(\DB::raw("avg(score)"))
                     ->pluck("a")
                     ->toArray();
-
+      //dd($courses);
+      $allays=[];
       foreach ($courses AS $course)
       {
         $ay=$course->semester->ay;
-        $avgs[$course->id]=$course->scores()->avg('score');
+        $allays[]=$ay;
+        $avgs[$course->id]=$course->scores()->where('instructor_id',$instructor_id)->avg('score');
         $classinfo[$course->id]=$this->getClassInfo($course->id);
-        $count=$course->scores()->count('score');
+        $count=$course->scores()->where('instructor_id',$instructor_id)->count('score');
         $count=$count/10;
 
         $evalcounts[$course->id]=$count;
@@ -168,6 +171,7 @@ class DisplayController extends Controller
         };
       };
       //dd($ayavgs);
+      //dd($allays);
       return view('displays.summary',['avgs'=>$avgs,
               'means'=>$means,
               'classinfo'=>$classinfo,

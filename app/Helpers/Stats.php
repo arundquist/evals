@@ -71,7 +71,7 @@ class Stats
   {
     $i=0;
     $size=count($list);
-    while ($list[$i] < $mean) {
+    while (($list[$i] < $mean)&&($i<$size-1)) {
       $i++;
     }
     return number_format($i/$size*100,0);
