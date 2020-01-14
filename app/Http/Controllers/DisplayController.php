@@ -236,6 +236,8 @@ class DisplayController extends Controller
         $all[$dept]=$this->getCourseData($courseids);
       };
       return view('displays.alldepts',
+
+
         ['all'=>$all,
         'depts'=>$alldepts,
         'questions'=>$questions]);
@@ -323,7 +325,7 @@ class DisplayController extends Controller
 
     public function getAllLevels()
     {
-      $alldepts=[1000,3000,5000];
+      $alldepts=[1000,3000,5000,6000,7000,8000];
       $all=[];
       $questions=Question::orderBy('questionnum')->get();
       foreach($alldepts AS $dept)
